@@ -78,10 +78,25 @@ const OnboardingForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const tabs = ['personal', 'education', 'experience', 'identity', 'profile'];
 
   useEffect(() => {
     fetchCandidateInfo();
   }, []);
+
+  const goToNextTab = () => {
+    const currentIndex = tabs.indexOf(activeTab);
+    if (currentIndex < tabs.length - 1) {
+      setActiveTab(tabs[currentIndex + 1]);
+    }
+  };
+
+  const goToPreviousTab = () => {
+    const currentIndex = tabs.indexOf(activeTab);
+    if (currentIndex > 0) {
+      setActiveTab(tabs[currentIndex - 1]);
+    }
+  };
 
   const fetchCandidateInfo = async () => {
     try {
@@ -1152,24 +1167,44 @@ const OnboardingForm = () => {
               </div>
             )}
 
-            {/* Submit Button */}
+            {/* Navigation Buttons */}
             <div className="form-actions">
-              <button
-                type="submit"
-                className="btn btn-primary btn-large"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <div className="spinner spinner-small"></div>
-                    Submitting...
-                  </>
-                ) : (
-                  <>
-                    <FiSave /> Submit Onboarding
-                  </>
-                )}
-              </button>
+              {activeTab !== 'personal' && (
+                <button
+                  type="button"
+                  className="btn-nav btn-prev"
+                  onClick={goToPreviousTab}
+                >
+                  ← Previous
+                </button>
+              )}
+              {activeTab !== 'profile' && (
+                <button
+                  type="button"
+                  className="btn-nav btn-next"
+                  onClick={goToNextTab}
+                >
+                  Next →
+                </button>
+              )}
+              {activeTab === 'profile' && (
+                <button
+                  type="submit"
+                  className="btn-nav btn-submit"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <div className="spinner spinner-small"></div>
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <FiSave /> Submit Onboarding
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </form>
         </div>
