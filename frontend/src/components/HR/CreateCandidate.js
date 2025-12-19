@@ -168,45 +168,49 @@ const CreateCandidate = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="department" className="form-label required">Department/Practice</label>
-              <select
-                id="department"
-                name="department"
-                className={`form-control ${errors.department ? 'error' : ''}`}
-                value={formData.department}
-                onChange={handleChange}
-              >
-                <option value="">Select Department</option>
-                <option value="Engineering">Engineering</option>
-                <option value="Data Science">Data Science</option>
-                <option value="Cloud Solutions">Cloud Solutions</option>
-                <option value="AI & ML">AI & ML</option>
-                <option value="DevOps">DevOps</option>
-                <option value="Quality Assurance">Quality Assurance</option>
-                <option value="Product Management">Product Management</option>
-                <option value="HR">HR</option>
-                <option value="Finance">Finance</option>
-              </select>
-              {errors.department && <span className="error-message">{errors.department}</span>}
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="department" className="form-label required">Department/Practice</label>
+                <select
+                  id="department"
+                  name="department"
+                  className={`form-control ${errors.department ? 'error' : ''}`}
+                  value={formData.department}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Department</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Data Science">Data Science</option>
+                  <option value="Cloud Solutions">Cloud Solutions</option>
+                  <option value="AI & ML">AI & ML</option>
+                  <option value="DevOps">DevOps</option>
+                  <option value="Quality Assurance">Quality Assurance</option>
+                  <option value="Product Management">Product Management</option>
+                  <option value="HR">HR</option>
+                  <option value="Finance">Finance</option>
+                </select>
+                {errors.department && <span className="error-message">{errors.department}</span>}
+              </div>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="offerLetter" className="form-label required">Offer Letter (PDF only)</label>
-              <div className={`file-upload ${offerLetter ? 'active' : ''} ${errors.offerLetter ? 'error' : ''}`}>
-                <input
-                  type="file"
-                  id="offerLetter"
-                  accept=".pdf"
-                  onChange={handleFileChange}
-                  style={{ display: 'none' }}
-                />
-                <label htmlFor="offerLetter" style={{ cursor: 'pointer', width: '100%' }}>
-                  <FiUpload size={32} />
-                  <p>{offerLetter ? offerLetter.name : 'Click to upload offer letter (PDF, Max 5MB)'}</p>
-                </label>
+            <div className="form-row" style={{ borderBottom: 'none', paddingBottom: 0 }}>
+              <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                <label htmlFor="offerLetter" className="form-label required">Offer Letter (PDF only)</label>
+                <div className={`file-upload ${offerLetter ? 'active' : ''} ${errors.offerLetter ? 'error' : ''}`}>
+                  <input
+                    type="file"
+                    id="offerLetter"
+                    accept=".pdf"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                  />
+                  <label htmlFor="offerLetter">
+                    <FiUpload size={32} />
+                    <p>{offerLetter ? offerLetter.name : 'Click to upload offer letter (PDF, Max 5MB)'}</p>
+                  </label>
+                </div>
+                {errors.offerLetter && <span className="error-message">{errors.offerLetter}</span>}
               </div>
-              {errors.offerLetter && <span className="error-message">{errors.offerLetter}</span>}
             </div>
 
             <div className="form-actions">
