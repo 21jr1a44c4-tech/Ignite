@@ -1,0 +1,356 @@
+.onboarding-page {
+  min-height: 100vh;
+  background: var(--bg-light);
+  padding-bottom: 60px;
+}
+
+.onboarding-header {
+  background: var(--primary-gradient);
+  padding: 24px 0;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 30px;
+}
+
+/* WinWire Logo Styles */
+.winwire-logo-small {
+  font-size: 0;
+  display: inline-block;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.logo-win-small,
+.logo-wire-small {
+  font-size: 24px;
+  font-weight: 700;
+  font-style: italic;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+.logo-win-small {
+  color: #0066CC;
+}
+
+.logo-wire-small {
+  color: #DC3545;
+}
+
+.info-banner {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.info-banner .info-item label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.info-banner .info-item p {
+  font-size: 16px;
+  color: var(--text-dark);
+  font-weight: 600;
+  margin: 0;
+}
+
+.onboarding-form-container {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: var(--shadow-md);
+}
+
+.onboarding-form-container h2 {
+  font-size: 32px;
+  margin-bottom: 8px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.form-subtitle {
+  color: var(--text-light);
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 16px 24px;
+  border: none;
+  background: transparent;
+  color: var(--text-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--primary-color);
+}
+
+.tab.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.tab-content {
+  margin-bottom: 30px;
+}
+
+.tab-content h3 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: var(--text-dark);
+  border-left: 4px solid var(--primary-color);
+  padding-left: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Company Entry */
+.company-entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 16px;
+  background: var(--bg-light);
+  border-radius: 8px;
+}
+
+.btn-icon-danger {
+  padding: 12px;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon-danger:hover {
+  background: #da190b;
+}
+
+/* Uploaded Files */
+.uploaded-file {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-light);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.uploaded-file span {
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.uploaded-file button {
+  padding: 8px;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+}
+
+.uploaded-file button:hover {
+  background: #da190b;
+}
+
+/* Photo Preview */
+.photo-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 16px;
+  border: 4px solid var(--primary-color);
+  box-shadow: var(--shadow-md);
+}
+
+/* Character Count */
+.char-count {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* Info Message */
+.info-message {
+  background: rgba(33, 150, 243, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #2196F3;
+  margin-top: 20px;
+}
+
+.info-message p {
+  margin: 0;
+  color: #1976D2;
+  font-weight: 500;
+}
+
+/* Status Container */
+.status-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: var(--bg-light);
+}
+
+.status-card {
+  background: white;
+  border-radius: 24px;
+  padding: 60px 40px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.status-icon {
+  font-size: 80px;
+  margin-bottom: 24px;
+}
+
+.status-icon.status-submitted {
+  color: var(--warning-color);
+}
+
+.status-icon.status-approved {
+  color: var(--success-color);
+}
+
+.status-card h1 {
+  font-size: 32px;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.status-card p {
+  font-size: 16px;
+  color: var(--text-light);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.remarks-box {
+  background: var(--bg-light);
+  padding: 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+  text-align: left;
+  border-left: 4px solid var(--primary-color);
+}
+
+.remarks-box h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.remarks-box p {
+  margin: 0;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .onboarding-form-container {
+    padding: 24px 16px;
+  }
+
+  .tabs {
+    gap: 8px;
+  }
+
+  .tab {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .company-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .info-banner {
+    grid-template-columns: 1fr;
+  }
+
+  .status-card {
+    padding: 40px 24px;
+  }
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-content {
+  animation: slideDown 0.4s ease-out;
+}
