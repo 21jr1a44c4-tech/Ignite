@@ -3,12 +3,12 @@ const router = express.Router();
 const OnboardingSubmission = require('../models/OnboardingSubmission.model');
 const Candidate = require('../models/Candidate.model');
 const { protect } = require('../middleware/auth.middleware');
-const upload = require('../utils/fileUpload');
+const { uploadToDatabase, prepareDocumentForDB, prepareDocumentsForDB } = require('../utils/databaseFileUpload');
 
 // @route   POST /api/onboarding/submit
 // @desc    Submit onboarding form
 // @access  Private/Employee
-router.post('/submit', protect, upload.fields([
+router.post('/submit', protect, uploadToDatabase.fields([
   // Education certificates
   { name: 'tenthCertificate', maxCount: 1 },
   { name: 'intermediateCertificate', maxCount: 1 },
@@ -144,36 +144,36 @@ router.post('/submit', protect, upload.fields([
       degreePercentage: Number(degreePercentage),
       
       // Education certificates
-      tenthCertificate: req.files.tenthCertificate[0].filename,
-      intermediateCertificate: req.files.intermediateCertificate[0].filename,
-      degreeCertificate: req.files.degreeCertificate[0].filename,
-      additionalCertificates: req.files.additionalCertificates?.map(f => f.filename) || [],
+      tenthCertificate: prepareDocumentForDB(req.files.tenthCertificate[0]),
+      intermediateCertificate: prepareDocumentForDB(req.files.intermediateCertificate[0]),
+      degreeCertificate: prepareDocumentForDB(req.files.degreeCertificate[0]),
+      additionalCertificates: prepareDocumentsForDB(req.files.additionalCertificates || []),
       
       // BTech semester certificates
-      semester1_1: req.files.semester1_1?.[0]?.filename,
-      semester1_2: req.files.semester1_2?.[0]?.filename,
-      semester2_1: req.files.semester2_1?.[0]?.filename,
-      semester2_2: req.files.semester2_2?.[0]?.filename,
-      semester3_1: req.files.semester3_1?.[0]?.filename,
-      semester3_2: req.files.semester3_2?.[0]?.filename,
-      semester4_1: req.files.semester4_1?.[0]?.filename,
-      semester4_2: req.files.semester4_2?.[0]?.filename,
-      provisionalCertificate: req.files.provisionalCertificate?.[0]?.filename,
+      semester1_1: req.files.semester1_1?.[0] ? prepareDocumentForDB(req.files.semester1_1[0]) : undefined,
+      semester1_2: req.files.semester1_2?.[0] ? prepareDocumentForDB(req.files.semester1_2[0]) : undefined,
+      semester2_1: req.files.semester2_1?.[0] ? prepareDocumentForDB(req.files.semester2_1[0]) : undefined,
+      semester2_2: req.files.semester2_2?.[0] ? prepareDocumentForDB(req.files.semester2_2[0]) : undefined,
+      semester3_1: req.files.semester3_1?.[0] ? prepareDocumentForDB(req.files.semester3_1[0]) : undefined,
+      semester3_2: req.files.semester3_2?.[0] ? prepareDocumentForDB(req.files.semester3_2[0]) : undefined,
+      semester4_1: req.files.semester4_1?.[0] ? prepareDocumentForDB(req.files.semester4_1[0]) : undefined,
+      semester4_2: req.files.semester4_2?.[0] ? prepareDocumentForDB(req.files.semester4_2[0]) : undefined,
+      provisionalCertificate: req.files.provisionalCertificate?.[0] ? prepareDocumentForDB(req.files.provisionalCertificate[0]) : undefined,
       
       // Experience
       totalExperience: Number(totalExperience) || 0,
       previousCompanies: parsedCompanies,
-      experienceLetters: req.files.experienceLetters?.map(f => f.filename) || [],
+      experienceLetters: prepareDocumentsForDB(req.files.experienceLetters || []),
       
       // Identity
       aadhaarNumber,
       panNumber,
-      aadhaarDocument: req.files.aadhaarDocument[0].filename,
-      panDocument: req.files.panDocument[0].filename,
-      addressProof: req.files.addressProof[0].filename,
+      aadhaarDocument: prepareDocumentForDB(req.files.aadhaarDocument[0]),
+      panDocument: prepareDocumentForDB(req.files.panDocument[0]),
+      addressProof: prepareDocumentForDB(req.files.addressProof[0]),
       
       // Profile
-      profilePhoto: req.files.profilePhoto[0].filename,
+      profilePhoto: prepareDocumentForDB(req.files.profilePhoto[0]),
       aboutMe,
       
       status: 'SUBMITTED'
@@ -226,6 +226,36 @@ router.get('/my-submission', protect, async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching submission:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching submission'
+    });
+  }
+});
+
+// @route   GET /api/onboarding/submission/:submissionId/details
+// @desc    Get full submission details with document data
+// @access  Private
+router.get('/submission/:submissionId/details', protect, async (req, res) => {
+  try {
+    const { submissionId } = req.params;
+
+    const submission = await OnboardingSubmission.findById(submissionId);
+
+    if (!submission) {
+      return res.status(404).json({
+        success: false,
+        message: 'Submission not found'
+      });
+    }
+
+    // Return full submission with documents
+    res.json({
+      success: true,
+      submission
+    });
+  } catch (error) {
+    console.error('Error fetching submission details:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching submission'

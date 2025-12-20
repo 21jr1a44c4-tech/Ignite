@@ -106,29 +106,83 @@ const onboardingSubmissionSchema = new mongoose.Schema({
     required: true
   },
   tenthCertificate: {
-    type: String,
-    required: true
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   },
   intermediateCertificate: {
-    type: String,
-    required: true
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   },
   // BTech Semester Certificates
-  semester1_1: { type: String },
-  semester1_2: { type: String },
-  semester2_1: { type: String },
-  semester2_2: { type: String },
-  semester3_1: { type: String },
-  semester3_2: { type: String },
-  semester4_1: { type: String },
-  semester4_2: { type: String },
-  provisionalCertificate: { type: String },
+  semester1_1: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
+  semester1_2: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
+  semester2_1: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
+  semester2_2: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
+  semester3_1: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
+  semester3_2: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
+  semester4_1: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
+  semester4_2: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
+  provisionalCertificate: {
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
+  },
   degreeCertificate: {
-    type: String,
-    required: true
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   },
   additionalCertificates: [{
-    type: String
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   }],
   
   // Experience Information
@@ -143,7 +197,10 @@ const onboardingSubmissionSchema = new mongoose.Schema({
     duration: String
   }],
   experienceLetters: [{
-    type: String
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   }],
   
   // Identity Documents
@@ -158,22 +215,30 @@ const onboardingSubmissionSchema = new mongoose.Schema({
     match: /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/
   },
   aadhaarDocument: {
-    type: String,
-    required: true
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   },
   panDocument: {
-    type: String,
-    required: true
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   },
   addressProof: {
-    type: String,
-    required: true
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   },
   
   // Profile Information
   profilePhoto: {
-    type: String,
-    required: true
+    data: { type: String },
+    contentType: { type: String },
+    filename: { type: String },
+    uploadedAt: { type: Date }
   },
   aboutMe: {
     type: String,

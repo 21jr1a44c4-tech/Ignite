@@ -35,10 +35,10 @@ const AcceptOnboardingPass = () => {
     setAccepting(true);
     try {
       await api.post(`/admin/accept-onboarding-pass/${token}`);
-      
+
       setAccepted(true);
       toast.success('Congratulations! Your employee account has been activated!');
-      
+
       // Redirect to login after 3 seconds
       setTimeout(() => {
         navigate('/login');
@@ -93,9 +93,7 @@ const AcceptOnboardingPass = () => {
             <h3>What's Next?</h3>
             <ul className="next-steps">
               <li>✓ Your Employee ID has been generated</li>
-              <li>✓ You will receive 5 onboarding emails with important information</li>
-              <li>✓ All active employees have been notified about your joining</li>
-              <li>✓ You can now access the employee portal with your credentials</li>
+              <li>✓ You will receive 5 onboarding emails with important information on joining date. Do not Panic Hr Team will explain</li>
             </ul>
           </div>
           <p className="redirect-message">Redirecting to login page...</p>
@@ -110,7 +108,7 @@ const AcceptOnboardingPass = () => {
         <div className="winwire-logo-page">
           <span className="logo-win">Win</span><span className="logo-wire">Wire</span>
         </div>
-        
+
         <h1>Onboarding Pass Approved!</h1>
         <p className="subtitle">Welcome to WinWire Technologies</p>
 
@@ -119,14 +117,14 @@ const AcceptOnboardingPass = () => {
           <p>
             Your onboarding documents have been reviewed and approved by our HR team.
             You're one step away from officially joining the WinWire family!
-          {submissionData?.dateOfJoining && (
-            <div style={{ marginTop: '20px', padding: '15px', background: '#E8F4FD', borderRadius: '8px', border: '2px solid #0066CC' }}>
-              <p style={{ fontSize: '18px', fontWeight: '600', color: '#0066CC', margin: '0' }}>
-                🎉 You will be joining us on {new Date(submissionData.dateOfJoining).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}!
-              </p>
-              <p style={{ fontSize: '16px', color: '#000', margin: '10px 0 0 0' }}>Welcome to Winwire!</p>
-            </div>
-          )}
+            {submissionData?.dateOfJoining && (
+              <div style={{ marginTop: '20px', padding: '15px', background: '#E8F4FD', borderRadius: '8px', border: '2px solid #0066CC' }}>
+                <p style={{ fontSize: '18px', fontWeight: '600', color: '#0066CC', margin: '0' }}>
+                  🎉 You will be joining us on {new Date(submissionData.dateOfJoining).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}!
+                </p>
+                <p style={{ fontSize: '16px', color: '#000', margin: '10px 0 0 0' }}>Welcome to Winwire!</p>
+              </div>
+            )}
           </p>
         </div>
 
@@ -145,20 +143,6 @@ const AcceptOnboardingPass = () => {
               <div>
                 <strong>Onboarding Emails</strong>
                 <p>You'll receive 5 important emails with company policies, guidelines, and resources</p>
-              </div>
-            </li>
-            <li>
-              <FiBriefcase className="icon" />
-              <div>
-                <strong>Team Notification</strong>
-                <p>All active employees will be notified about your joining</p>
-              </div>
-            </li>
-            <li>
-              <FiCalendar className="icon" />
-              <div>
-                <strong>Access to Portal</strong>
-                <p>You can access the employee portal using your login credentials</p>
               </div>
             </li>
           </ul>

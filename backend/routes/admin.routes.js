@@ -49,9 +49,68 @@ router.get('/submissions/:id', protect, authorize('HR'), async (req, res) => {
       });
     }
 
+    // Convert Buffer data to base64 for transmission to frontend
+    const submissionObj = submission.toObject();
+    
+    // Helper function to ensure documents have base64 data
+    // Data is already stored as base64 in the database, but handle edge cases
+    const ensureBase64 = (doc) => {
+      if (!doc) return doc;
+      
+      if (doc.data) {
+        // If it's already a string (base64), return as-is
+        if (typeof doc.data === 'string') {
+          return doc;
+        }
+        
+        // If it's a Buffer, convert to base64
+        if (Buffer.isBuffer(doc.data)) {
+          return {
+            ...doc,
+            data: doc.data.toString('base64')
+          };
+        }
+        
+        // If it's a serialized buffer object, convert
+        if (typeof doc.data === 'object' && doc.data.type === 'Buffer' && Array.isArray(doc.data.data)) {
+          return {
+            ...doc,
+            data: Buffer.from(doc.data.data).toString('base64')
+          };
+        }
+      }
+      return doc;
+    };
+
+    // Ensure all document fields have base64 data
+    if (submissionObj.tenthCertificate) submissionObj.tenthCertificate = ensureBase64(submissionObj.tenthCertificate);
+    if (submissionObj.intermediateCertificate) submissionObj.intermediateCertificate = ensureBase64(submissionObj.intermediateCertificate);
+    if (submissionObj.degreeCertificate) submissionObj.degreeCertificate = ensureBase64(submissionObj.degreeCertificate);
+    if (submissionObj.semester1_1) submissionObj.semester1_1 = ensureBase64(submissionObj.semester1_1);
+    if (submissionObj.semester1_2) submissionObj.semester1_2 = ensureBase64(submissionObj.semester1_2);
+    if (submissionObj.semester2_1) submissionObj.semester2_1 = ensureBase64(submissionObj.semester2_1);
+    if (submissionObj.semester2_2) submissionObj.semester2_2 = ensureBase64(submissionObj.semester2_2);
+    if (submissionObj.semester3_1) submissionObj.semester3_1 = ensureBase64(submissionObj.semester3_1);
+    if (submissionObj.semester3_2) submissionObj.semester3_2 = ensureBase64(submissionObj.semester3_2);
+    if (submissionObj.semester4_1) submissionObj.semester4_1 = ensureBase64(submissionObj.semester4_1);
+    if (submissionObj.semester4_2) submissionObj.semester4_2 = ensureBase64(submissionObj.semester4_2);
+    if (submissionObj.provisionalCertificate) submissionObj.provisionalCertificate = ensureBase64(submissionObj.provisionalCertificate);
+    if (submissionObj.aadhaarDocument) submissionObj.aadhaarDocument = ensureBase64(submissionObj.aadhaarDocument);
+    if (submissionObj.panDocument) submissionObj.panDocument = ensureBase64(submissionObj.panDocument);
+    if (submissionObj.addressProof) submissionObj.addressProof = ensureBase64(submissionObj.addressProof);
+    if (submissionObj.profilePhoto) submissionObj.profilePhoto = ensureBase64(submissionObj.profilePhoto);
+    
+    // Convert arrays
+    if (submissionObj.additionalCertificates && Array.isArray(submissionObj.additionalCertificates)) {
+      submissionObj.additionalCertificates = submissionObj.additionalCertificates.map(ensureBase64);
+    }
+    if (submissionObj.experienceLetters && Array.isArray(submissionObj.experienceLetters)) {
+      submissionObj.experienceLetters = submissionObj.experienceLetters.map(ensureBase64);
+    }
+
     res.json({
       success: true,
-      submission
+      submission: submissionObj
     });
   } catch (error) {
     console.error('Error fetching submission:', error);
@@ -259,7 +318,7 @@ router.post('/accept-onboarding-pass/:token', async (req, res) => {
     // Get candidate
     const candidate = await Candidate.findById(submission.candidateId);
 
-    // Create Employee record
+    // Create Employee record with all documents
     const employee = new Employee({
       employeeId,
       userId: user._id,
@@ -274,9 +333,30 @@ router.post('/accept-onboarding-pass/:token', async (req, res) => {
       linkedinUrl: submission.linkedinUrl,
       department: submission.department,
       position: candidate?.position || 'Software Engineer',
-      profilePhoto: submission.profilePhoto,
+      profilePhoto: submission.profilePhoto?.data ? submission.profilePhoto : undefined,
       aboutMe: submission.selfDescription || submission.aboutMe,
-      isActive: true
+      isActive: true,
+      // Store all documents from submission
+      documents: {
+        tenthCertificate: submission.tenthCertificate,
+        intermediateCertificate: submission.intermediateCertificate,
+        degreeCertificate: submission.degreeCertificate,
+        additionalCertificates: submission.additionalCertificates || [],
+        semester1_1: submission.semester1_1,
+        semester1_2: submission.semester1_2,
+        semester2_1: submission.semester2_1,
+        semester2_2: submission.semester2_2,
+        semester3_1: submission.semester3_1,
+        semester3_2: submission.semester3_2,
+        semester4_1: submission.semester4_1,
+        semester4_2: submission.semester4_2,
+        provisionalCertificate: submission.provisionalCertificate,
+        experienceLetters: submission.experienceLetters || [],
+        aadhaarDocument: submission.aadhaarDocument,
+        panDocument: submission.panDocument,
+        addressProof: submission.addressProof,
+        profilePhoto: submission.profilePhoto
+      }
     });
 
     await employee.save();

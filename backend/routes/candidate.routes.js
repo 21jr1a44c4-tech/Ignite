@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Candidate = require('../models/Candidate.model');
 const { protect, authorize } = require('../middleware/auth.middleware');
-const upload = require('../utils/fileUpload');
+const { uploadToDatabase, prepareDocumentForDB } = require('../utils/databaseFileUpload');
 const { generateAcceptToken, verifyToken } = require('../utils/jwtUtils');
 const { sendOfferEmail, sendJoiningCredentials } = require('../utils/emailService');
 const User = require('../models/User.model');
@@ -11,7 +11,7 @@ const { v4: uuidv4 } = require('uuid');
 // @route   POST /api/candidates
 // @desc    Create new candidate and send offer
 // @access  Private/HR
-router.post('/', protect, authorize('HR'), upload.single('offerLetter'), async (req, res) => {
+router.post('/', protect, authorize('HR'), uploadToDatabase.single('offerLetter'), async (req, res) => {
   try {
     const { fullName, email, phone, position, department } = req.body;
 
@@ -51,7 +51,7 @@ router.post('/', protect, authorize('HR'), upload.single('offerLetter'), async (
       phone,
       position,
       department,
-      offerLetterPath: req.file.path,
+      offerLetter: prepareDocumentForDB(req.file),
       acceptToken,
       acceptTokenExpiry,
       createdBy: req.user._id
@@ -230,6 +230,52 @@ router.post('/:id/trigger-joining', protect, authorize('HR'), async (req, res) =
     res.status(500).json({
       success: false,
       message: 'Error triggering joining process'
+    });
+  }
+});
+
+// @route   GET /api/candidates/:candidateId/offer-letter
+// @desc    Get candidate offer letter
+// @access  Private/HR/Candidate
+router.get('/:candidateId/offer-letter', protect, async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+    
+    const candidate = await Candidate.findById(candidateId);
+    
+    if (!candidate) {
+      return res.status(404).json({
+        success: false,
+        message: 'Candidate not found'
+      });
+    }
+
+    // Check authorization: only HR or the candidate themselves can access the offer letter
+    if (req.user.role !== 'HR' && req.user.email !== candidate.email) {
+      return res.status(403).json({
+        success: false,
+        message: 'Unauthorized access to offer letter'
+      });
+    }
+
+    const offerLetter = candidate.offerLetter;
+
+    if (!offerLetter || !offerLetter.data) {
+      return res.status(404).json({
+        success: false,
+        message: 'Offer letter not found'
+      });
+    }
+
+    // Set appropriate headers and send the document
+    res.set('Content-Type', offerLetter.contentType);
+    res.set('Content-Disposition', `inline; filename="${offerLetter.filename}"`);
+    res.send(offerLetter.data);
+  } catch (error) {
+    console.error('Error fetching offer letter:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching offer letter'
     });
   }
 });

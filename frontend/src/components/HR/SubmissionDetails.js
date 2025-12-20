@@ -72,6 +72,73 @@ const SubmissionDetails = () => {
     }
   };
 
+  const downloadDocument = (documentObj, docName) => {
+    if (!documentObj || !documentObj.data) {
+      toast.error('Document not found');
+      return;
+    }
+
+    try {
+      let blobData;
+      
+      // Handle different data formats from MongoDB
+      if (typeof documentObj.data === 'string') {
+        // If it's a string, it should be base64 encoded
+        try {
+          // Clean up the base64 string (remove any whitespace)
+          const cleanBase64 = documentObj.data.replace(/\s/g, '');
+          
+          // Try to decode base64
+          const binaryString = atob(cleanBase64);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          blobData = new Blob([bytes], { type: documentObj.contentType || 'application/octet-stream' });
+          console.log('Successfully decoded base64 string');
+        } catch (e) {
+          console.error('Base64 decode error:', e);
+          toast.error('Error decoding document data');
+          return;
+        }
+      } else if (documentObj.data instanceof ArrayBuffer) {
+        // Handle ArrayBuffer
+        blobData = new Blob([documentObj.data], { type: documentObj.contentType || 'application/octet-stream' });
+      } else if (Array.isArray(documentObj.data)) {
+        // Handle array of bytes (MongoDB serializes Buffer as array)
+        const uint8Array = new Uint8Array(documentObj.data);
+        blobData = new Blob([uint8Array], { type: documentObj.contentType || 'application/octet-stream' });
+        console.log('Converted array to blob');
+      } else if (documentObj.data instanceof Blob) {
+        // Already a blob
+        blobData = documentObj.data;
+      } else {
+        // Try to handle as generic object
+        console.warn('Unknown data format:', typeof documentObj.data, documentObj.data);
+        blobData = new Blob([JSON.stringify(documentObj.data)], { type: documentObj.contentType || 'application/octet-stream' });
+      }
+
+      // Create download link
+      const url = window.URL.createObjectURL(blobData);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = documentObj.filename || `${docName}`;
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      }, 100);
+      
+      toast.success('Document downloaded successfully');
+    } catch (error) {
+      toast.error('Error downloading document');
+      console.error('Download error:', error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -98,12 +165,14 @@ const SubmissionDetails = () => {
         <div className="submission-details-card fade-in">
           <div className="details-header">
             <div className="profile-section">
-              {submission.profilePhoto && (
-                <img
-                  src={`${BACKEND_URL}/uploads/${submission.profilePhoto}`}
-                  alt={submission.fullName}
-                  className="profile-photo"
-                />
+              {submission.profilePhoto?.data && (
+                <div className="profile-photo-container">
+                  <img
+                    src={`data:${submission.profilePhoto.contentType};base64,${submission.profilePhoto.data}`}
+                    alt={submission.fullName}
+                    className="profile-photo"
+                  />
+                </div>
               )}
               <div>
                 <h1>{submission.fullName}</h1>
@@ -265,110 +334,134 @@ const SubmissionDetails = () => {
           <div className="details-section">
             <h2>Educational Certificates</h2>
             <div className="documents-grid">
-              {submission.tenthCertificate && (
+              {submission.tenthCertificate?.data && (
                 <div className="document-item">
                   <label>10th Certificate</label>
-                  <a href={`${BACKEND_URL}/uploads/${submission.tenthCertificate}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                    <FiDownload /> View Document
-                  </a>
+                  <button 
+                    onClick={() => downloadDocument(submission.tenthCertificate, '10th-certificate')}
+                    className="btn btn-secondary btn-sm">
+                    <FiDownload /> {submission.tenthCertificate?.filename || 'View Document'}
+                  </button>
                 </div>
               )}
-              {submission.intermediateCertificate && (
+              {submission.intermediateCertificate?.data && (
                 <div className="document-item">
                   <label>Intermediate Certificate</label>
-                  <a href={`${BACKEND_URL}/uploads/${submission.intermediateCertificate}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                    <FiDownload /> View Document
-                  </a>
+                  <button 
+                    onClick={() => downloadDocument(submission.intermediateCertificate, 'intermediate-certificate')}
+                    className="btn btn-secondary btn-sm">
+                    <FiDownload /> {submission.intermediateCertificate?.filename || 'View Document'}
+                  </button>
                 </div>
               )}
-              {submission.degreeCertificate && (
+              {submission.degreeCertificate?.data && (
                 <div className="document-item">
                   <label>Degree Certificate</label>
-                  <a href={`${BACKEND_URL}/uploads/${submission.degreeCertificate}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                    <FiDownload /> View Document
-                  </a>
+                  <button 
+                    onClick={() => downloadDocument(submission.degreeCertificate, 'degree-certificate')}
+                    className="btn btn-secondary btn-sm">
+                    <FiDownload /> {submission.degreeCertificate?.filename || 'View Document'}
+                  </button>
                 </div>
               )}
             </div>
           </div>
 
           {/* BTech Semester Certificates */}
-          {(submission.semester1_1 || submission.semester1_2 || submission.semester2_1 || submission.semester2_2 || 
-            submission.semester3_1 || submission.semester3_2 || submission.semester4_1 || submission.semester4_2 || 
-            submission.provisionalCertificate) && (
+          {(submission.semester1_1?.data || submission.semester1_2?.data || submission.semester2_1?.data || submission.semester2_2?.data || 
+            submission.semester3_1?.data || submission.semester3_2?.data || submission.semester4_1?.data || submission.semester4_2?.data || 
+            submission.provisionalCertificate?.data) && (
             <div className="details-section">
               <h2>BTech Semester Certificates</h2>
               <div className="documents-grid">
-                {submission.semester1_1 && (
+                {submission.semester1_1?.data && (
                   <div className="document-item">
                     <label>Semester 1-1</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.semester1_1}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.semester1_1, 'semester-1-1')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.semester1_1?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
-                {submission.semester1_2 && (
+                {submission.semester1_2?.data && (
                   <div className="document-item">
                     <label>Semester 1-2</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.semester1_2}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.semester1_2, 'semester-1-2')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.semester1_2?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
-                {submission.semester2_1 && (
+                {submission.semester2_1?.data && (
                   <div className="document-item">
                     <label>Semester 2-1</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.semester2_1}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.semester2_1, 'semester-2-1')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.semester2_1?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
-                {submission.semester2_2 && (
+                {submission.semester2_2?.data && (
                   <div className="document-item">
                     <label>Semester 2-2</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.semester2_2}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.semester2_2, 'semester-2-2')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.semester2_2?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
-                {submission.semester3_1 && (
+                {submission.semester3_1?.data && (
                   <div className="document-item">
                     <label>Semester 3-1</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.semester3_1}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.semester3_1, 'semester-3-1')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.semester3_1?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
-                {submission.semester3_2 && (
+                {submission.semester3_2?.data && (
                   <div className="document-item">
                     <label>Semester 3-2</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.semester3_2}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.semester3_2, 'semester-3-2')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.semester3_2?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
-                {submission.semester4_1 && (
+                {submission.semester4_1?.data && (
                   <div className="document-item">
                     <label>Semester 4-1</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.semester4_1}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.semester4_1, 'semester-4-1')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.semester4_1?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
-                {submission.semester4_2 && (
+                {submission.semester4_2?.data && (
                   <div className="document-item">
                     <label>Semester 4-2</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.semester4_2}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.semester4_2, 'semester-4-2')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.semester4_2?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
-                {submission.provisionalCertificate && (
+                {submission.provisionalCertificate?.data && (
                   <div className="document-item">
                     <label>Provisional Certificate</label>
-                    <a href={`${BACKEND_URL}/uploads/${submission.provisionalCertificate}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                      <FiDownload /> View Document
-                    </a>
+                    <button 
+                      onClick={() => downloadDocument(submission.provisionalCertificate, 'provisional-certificate')}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {submission.provisionalCertificate?.filename || 'View Document'}
+                    </button>
                   </div>
                 )}
               </div>
@@ -397,26 +490,93 @@ const SubmissionDetails = () => {
           <div className="details-section">
             <h2>Identity Documents</h2>
             <div className="documents-grid">
-              <div className="document-item">
-                <label>Aadhaar Card</label>
-                <a href={`${BACKEND_URL}/uploads/${submission.aadhaarDocument}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                  <FiDownload /> View Document
-                </a>
-              </div>
-              <div className="document-item">
-                <label>PAN Card</label>
-                <a href={`${BACKEND_URL}/uploads/${submission.panDocument}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                  <FiDownload /> View Document
-                </a>
-              </div>
-              <div className="document-item">
-                <label>Address Proof</label>
-                <a href={`${BACKEND_URL}/uploads/${submission.addressProof}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                  <FiDownload /> View Document
-                </a>
-              </div>
+              {submission.aadhaarDocument?.data && (
+                <div className="document-item">
+                  <label>Aadhaar Card</label>
+                  <button 
+                    onClick={() => downloadDocument(submission.aadhaarDocument, 'aadhaar')}
+                    className="btn btn-secondary btn-sm">
+                    <FiDownload /> {submission.aadhaarDocument?.filename || 'View Document'}
+                  </button>
+                </div>
+              )}
+              {submission.panDocument?.data && (
+                <div className="document-item">
+                  <label>PAN Card</label>
+                  <button 
+                    onClick={() => downloadDocument(submission.panDocument, 'pan')}
+                    className="btn btn-secondary btn-sm">
+                    <FiDownload /> {submission.panDocument?.filename || 'View Document'}
+                  </button>
+                </div>
+              )}
+              {submission.addressProof?.data && (
+                <div className="document-item">
+                  <label>Address Proof</label>
+                  <button 
+                    onClick={() => downloadDocument(submission.addressProof, 'address-proof')}
+                    className="btn btn-secondary btn-sm">
+                    <FiDownload /> {submission.addressProof?.filename || 'View Document'}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Additional Certificates */}
+          {submission.additionalCertificates && submission.additionalCertificates.some(cert => cert?.data) && (
+            <div className="details-section">
+              <h2>Additional Certificates</h2>
+              <div className="documents-grid">
+                {submission.additionalCertificates.map((cert, index) => cert?.data && (
+                  <div key={index} className="document-item">
+                    <label>Additional Certificate {index + 1}</label>
+                    <button 
+                      onClick={() => downloadDocument(cert, `additional-certificate-${index + 1}`)}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {cert?.filename || 'View Document'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Experience Letters */}
+          {submission.experienceLetters && submission.experienceLetters.some(letter => letter?.data) && (
+            <div className="details-section">
+              <h2>Experience Letters</h2>
+              <div className="documents-grid">
+                {submission.experienceLetters.map((letter, index) => letter?.data && (
+                  <div key={index} className="document-item">
+                    <label>Experience Letter {index + 1}</label>
+                    <button 
+                      onClick={() => downloadDocument(letter, `experience-letter-${index + 1}`)}
+                      className="btn btn-secondary btn-sm">
+                      <FiDownload /> {letter?.filename || 'View Document'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Profile Photo Download Section */}
+          {submission.profilePhoto?.data && (
+            <div className="details-section">
+              <h2>Download Profile Photo</h2>
+              <div className="documents-grid">
+                <div className="document-item">
+                  <label>Profile Photo</label>
+                  <button 
+                    onClick={() => downloadDocument(submission.profilePhoto, 'profile-photo')}
+                    className="btn btn-secondary btn-sm">
+                    <FiDownload /> {submission.profilePhoto?.filename || 'View Document'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* HR Remarks */}
           {submission.hrRemarks && (

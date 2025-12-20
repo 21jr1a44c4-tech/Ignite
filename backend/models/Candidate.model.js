@@ -28,9 +28,27 @@ const candidateSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  offerLetter: {
+    data: {
+      type: String,
+      required: true
+    },
+    contentType: {
+      type: String,
+      required: true
+    },
+    filename: {
+      type: String,
+      required: true
+    },
+    uploadedAt: {
+      type: Date,
+      default: Date.now
+    }
+  },
+  // Legacy field for backward compatibility
   offerLetterPath: {
-    type: String,
-    required: true
+    type: String
   },
   offerStatus: {
     type: String,
