@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FiUsers, FiUserCheck, FiFileText, FiUserPlus, FiLogOut, FiPlusCircle, FiEye } from 'react-icons/fi';
 import api from '../../utils/api';
+import WinWireChat from '../WinWireChat';
 import './HRDashboard.css';
 
 const HRDashboard = () => {
@@ -246,6 +247,9 @@ const HRDashboard = () => {
           </div>
         </div>
       </div>
+      
+      {/* Chatbot for HR - Database Query Prompts */}
+      <WinWireChat />
     </div>
   );
 };

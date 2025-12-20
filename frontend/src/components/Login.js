@@ -35,7 +35,7 @@ const Login = () => {
       if (response.data.user.role === 'HR') {
         navigate('/hr/dashboard');
       } else {
-        navigate('/employee/onboarding');
+        navigate('/employee/welcome');
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');

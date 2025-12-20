@@ -13,6 +13,9 @@ const candidateRoutes = require('./routes/candidate.routes');
 const onboardingRoutes = require('./routes/onboarding.routes');
 const employeeRoutes = require('./routes/employee.routes');
 const adminRoutes = require('./routes/admin.routes');
+const chatbotRoutes = require('./routes/chatbot.routes');
+const hrDatabaseRoutes = require('./routes/hrDatabase.routes');
+const promptsRoutes = require('./routes/prompts.routes');
 
 // Import seeder
 const seedAdmin = require('./utils/seedAdmin');
@@ -47,6 +50,9 @@ app.use('/api/candidates', candidateRoutes);
 app.use('/api/onboarding', onboardingRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/hr-database', hrDatabaseRoutes);
+app.use('/api/prompts', promptsRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

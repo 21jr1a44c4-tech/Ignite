@@ -13,6 +13,7 @@ import OnboardingForm from './components/Employee/OnboardingForm';
 import AcceptOffer from './components/AcceptOffer';
 import AcceptOnboardingPass from './components/AcceptOnboardingPass';
 import PrivateRoute from './components/PrivateRoute';
+import EmployeeWelcome from './components/EmployeeWelcome';
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
           <Route path="/accept-offer/:token" element={<AcceptOffer />} />
           <Route path="/accept-onboarding-pass/:token" element={<AcceptOnboardingPass />} />
           
-          {/* HR Routes */}
+          {/* HR Routes - NO Chatbot */}
           <Route 
             path="/hr/dashboard" 
             element={
@@ -70,7 +71,15 @@ function App() {
             } 
           />
           
-          {/* Employee Routes */}
+          {/* Employee Routes - WITH Chatbot */}
+          <Route 
+            path="/employee/welcome" 
+            element={
+              <PrivateRoute role="EMPLOYEE">
+                <EmployeeWelcome />
+              </PrivateRoute>
+            } 
+          />
           <Route 
             path="/employee/onboarding" 
             element={
