@@ -72,7 +72,7 @@ All documentation, guides, and reference materials.
 **Contents:**
 - Setup guides (QUICKSTART.md, AGENT_QUICKSTART.md)
 - Feature documentation (FEATURES.md)
-- Testing guides (TESTING.md, TESTING_GUIDE.md)
+- Testing guides (TESTING.md)
 - Email flow analysis (EMAIL_FLOW_ANALYSIS.md)
 - Chatbot setup (CHATBOT_SETUP.md)
 - Update summaries and checklists
@@ -167,7 +167,7 @@ Configuration templates and examples.
 For detailed information, see:
 - `docs/QUICKSTART.md` - Getting started guide
 - `docs/FEATURES.md` - Feature overview
-- `docs/TESTING_GUIDE.md` - Testing instructions
+- `docs/TESTING.md` - Testing instructions
 - `docs/CHATBOT_SETUP.md` - Chatbot configuration
 
 ---

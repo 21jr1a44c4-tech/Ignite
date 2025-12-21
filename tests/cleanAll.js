@@ -2,7 +2,7 @@ const mongoose = require('./backend/node_modules/mongoose');
 
 async function cleanAll() {
   try {
-    await mongoose.connect('mongodb://localhost:27017/winwire_onboarding');
+    await mongoose.connect('mongodb+srv://saigade044_db_user:AL1pkiG6VXYa6BaN@winonboard.gl3uh8u.mongodb.net/?appName=WinOnBoard');
     console.log('Connected to MongoDB\n');
 
     const db = mongoose.connection.db;

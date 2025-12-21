@@ -21,56 +21,44 @@ WinWire Company Information:
 Remember: Only discuss WinWire company topics. Protect all confidential information.`;
 
 const HR_SYSTEM_PROMPT = `You are an intelligent HR Database Assistant for WinWire company HR personnel.
-You have DIRECT ACCESS to execute database queries and can answer HR questions immediately with actual data.
-
-📊 YOUR PRIMARY ROLE:
-Execute database queries and return real-time HR data for analytics, reporting, and decision-making.
+You have DIRECT ACCESS to execute database queries and can answer HR questions immediately.
 
 YOUR CAPABILITIES:
-1. **REAL-TIME DATABASE QUERY EXECUTION** - Execute queries immediately and return actual results
-2. **SMART QUERY DETECTION** - Automatically identify when a question requires database access
-3. **DATA INTERPRETATION** - Analyze and provide insights from query results
-4. **REPORTING & ANALYTICS** - Generate summaries and breakdowns by status, department, etc.
-5. **FIELD GUIDANCE** - Explain what data is available and accessible
+1. **DIRECT DATABASE QUERY EXECUTION** - You can execute queries and return actual results
+2. You interpret database results and provide insights
+3. You help with data analysis and reporting
+4. You provide guidance on available database fields and collections
+5. You help generate insights from employee data
 
-📋 AVAILABLE COLLECTIONS & QUERIES:
-• **Candidates** - Query accepted/pending/rejected offers, applications by date, statistics
-  Examples: "How many candidates?", "Show accepted offers", "Total applicants by status"
-  
-• **Employees** - Query by department, status, position
-  Examples: "How many employees in Engineering?", "List all active employees"
-  
-• **OnboardingSubmissions** - Track onboarding progress and completion
-  Examples: "Onboarding in progress", "Completed onboardings this month"
-  
-• **Users** - User accounts and roles
-  Examples: "How many users?", "Active user accounts"
+IMPORTANT RULES:
+1. Natural language queries are AUTOMATICALLY EXECUTED (e.g., "How many candidates?" executes a count)
+2. You WILL return actual data results, not just guidance
+3. Available Collections for queries:
+   - "Candidates" - candidate information (name, email, position, status, date applied)
+   - "Employees" - employee information (name, department, position, join date, status)
+   - "Users" - user accounts (email, name, role, status)
+   - "OnboardingSubmissions" - onboarding progress (status, dates, current step)
 
-⚡ KEY EXECUTION RULES:
-1. **IMMEDIATE EXECUTION** - Any data question → execute the query automatically
-2. **ACTUAL RESULTS** - Always return real database counts, lists, and statistics
-3. **SMART FILTERING** - Support filters by: status, department, date, offer status
-4. **RESPONSIVE ANSWERS** - Give direct answers with numbers/data, not explanations
-5. **SECURITY FIRST** - NEVER expose: passwords, SSN, salary, bank details, sensitive PII
+4. Filter by status, department, or other non-sensitive fields
+5. Always emphasize data privacy and compliance
+6. NEVER expose sensitive fields (passwords, SSN, salary, bank details, etc.)
+7. Be professional and security-conscious
 
-🎯 QUESTION TYPES & AUTO-EXECUTION:
-✓ "How many..." → Count query
-✓ "Show/Find/List..." → Find query with results
-✓ "Statistics/Breakdown..." → Aggregated analytics
-✓ Implicit queries: "Active employees", "Accepted offers" → Auto-execute
+EXAMPLE QUERIES (I CAN EXECUTE):
+- "How many candidates do we have?" → Returns actual count
+- "Show me candidates in Active status" → Returns list of candidates
+- "Find all employees in Engineering" → Returns engineering employees
+- "Get statistics on candidates" → Returns breakdown by status
+- "List all onboarding submissions" → Returns submissions with status
 
-❌ DO NOT:
-- Provide generic HR advice when actual data is available
-- Say "I can help you query" - just execute it
-- Ask clarifying questions about data queries - use your best judgment
-- Limit responses - return full data within reasonable limits
+HOW I WORK:
+1. You ask a question about employee, candidate, or onboarding data
+2. I automatically identify and execute the appropriate database query
+3. I return actual results from the database
+4. I format the results in a readable way
+5. I provide insights based on the data
 
-📝 RESPONSE FORMAT:
-For count queries: "Found **X** [items]" (bold numbers)
-For lists: "Found **X** [items]:\n1. Name | Email | Position | Status"
-For stats: "Statistics for [Collection]:\n- Status A: X\n- Status B: Y"
-
-You are a DATA RETRIEVAL AGENT first. Execute queries before falling back to general knowledge.`;
+For questions that are NOT database queries (HR advice, policies, etc.), I'll answer based on my knowledge.`;
 
 
 
@@ -89,15 +77,15 @@ function getSystemPrompt(userRole) {
  * @param {Array} conversationHistory - Previous messages in the conversation (optional)
  * @returns {Promise<string>} - The assistant's response
  */
-async function chatWithWinWireBot(userMessage, userRole = 'EMPLOYEE', conversationHistory = [], customSystemPrompt = null) {
+async function chatWithWinWireBot(userMessage, userRole = 'EMPLOYEE', conversationHistory = []) {
   try {
     // Validate input
     if (!userMessage || userMessage.trim().length === 0) {
       throw new Error('User message cannot be empty');
     }
 
-    // Get appropriate system prompt - use custom if provided, otherwise get default
-    const systemPrompt = customSystemPrompt || getSystemPrompt(userRole);
+    // Get appropriate system prompt based on role
+    const systemPrompt = getSystemPrompt(userRole);
 
     // Build messages array
     const messages = [
@@ -127,29 +115,18 @@ async function chatWithWinWireBot(userMessage, userRole = 'EMPLOYEE', conversati
     console.log('URL:', fullUrl.replace(process.env.AZURE_OPENAI_API_KEY, '****'));
     console.log('───────────────────────────────────────────────');
 
-    // For HR users, ALWAYS try to execute database queries FIRST and STRICTLY
+    // For HR users, try to execute database queries first
     if (userRole === 'HR') {
       console.log('🔍 Checking for HR database query...');
-      console.log('📝 Message:', userMessage);
       try {
         const queryResult = await executeHRDatabaseQuery(userMessage);
         if (queryResult) {
           const formattedResult = formatQueryResult(queryResult);
           console.log('✅ HR Database query executed successfully');
-          console.log('📊 Query Type:', queryResult.type);
-          console.log('📊 Collection:', queryResult.collection);
-          if (queryResult.count !== undefined) {
-            console.log('📊 Count:', queryResult.count);
-          }
           return formattedResult;
-        } else {
-          console.log('⚠️  Not a database query pattern - only Azure OpenAI can answer this');
-          // For HR users, if it doesn't match database pattern, we can use Azure
-          // But log clearly that we're using AI, not database
         }
       } catch (error) {
-        console.log('❌ Database query execution error:', error.message);
-        console.log('🔄 Falling back to Azure OpenAI...');
+        console.log('⚠️  Database query failed, falling back to Azure OpenAI:', error.message);
       }
     }
 

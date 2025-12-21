@@ -3,17 +3,16 @@ import './WinWireChat.css';
 
 const WinWireChat = () => {
   const [messages, setMessages] = useState([]);
+  const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [userRole, setUserRole] = useState('EMPLOYEE');
-  const [prompts, setPrompts] = useState([]);
-  const [promptsLoading, setPromptsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   // Get backend URL from environment or use default
   const BACKEND_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-  // Get user role and load prompts on component mount
+  // Get user role from localStorage on component mount
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -27,36 +26,7 @@ const WinWireChat = () => {
         console.error('Error parsing user data:', error);
       }
     }
-    
-    // Load available prompts
-    loadPrompts();
   }, []);
-
-  const loadPrompts = async () => {
-    try {
-      setPromptsLoading(true);
-      const response = await fetch(`${BACKEND_URL}/chatbot/prompts`);
-      if (!response.ok) throw new Error('Failed to load prompts');
-      
-      const data = await response.json();
-      // Flatten prompts by category
-      const allPrompts = [];
-      Object.entries(data.prompts).forEach(([category, categoryPrompts]) => {
-        categoryPrompts.forEach(prompt => {
-          allPrompts.push({
-            ...prompt,
-            category: category
-          });
-        });
-      });
-      setPrompts(allPrompts);
-      console.log('Loaded prompts:', allPrompts.length);
-    } catch (error) {
-      console.error('Error loading prompts:', error);
-    } finally {
-      setPromptsLoading(false);
-    }
-  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -66,22 +36,36 @@ const WinWireChat = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handlePromptClick = async (promptId, label, emoji) => {
-    // Add prompt as user message
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+
+    if (!inputValue.trim()) return;
+
+    // Add user message to chat
     const userMessage = {
       id: Date.now(),
-      text: `${emoji} ${label}`,
+      text: inputValue,
       sender: 'user',
       timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    setInputValue('');
     setLoading(true);
 
     try {
-      // Send prompt execution request to backend
-      const apiUrl = `${BACKEND_URL}/chatbot/execute-prompt`;
-      console.log('Executing prompt:', promptId);
+      // Prepare conversation history (only keep last 10 messages)
+      const conversationHistory = messages
+        .slice(-10)
+        .map((msg) => ({
+          role: msg.sender === 'user' ? 'user' : 'assistant',
+          content: msg.text,
+        }));
+
+      // Send message to backend - use correct backend URL
+      const apiUrl = `${BACKEND_URL}/chatbot/message`;
+      console.log('Calling chatbot API:', apiUrl);
+      console.log('User Role:', userRole);
 
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -89,13 +73,14 @@ const WinWireChat = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          promptId: promptId,
+          message: inputValue,
+          userRole: userRole,
+          conversationHistory: conversationHistory,
         }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Failed to execute prompt: ${response.status}`);
+        throw new Error(`Failed to get response: ${response.status}`);
       }
 
       const data = await response.json();
@@ -103,11 +88,9 @@ const WinWireChat = () => {
       // Add bot response to chat
       const botMessage = {
         id: Date.now() + 1,
-        text: data.result || data.error,
+        text: data.response,
         sender: 'bot',
         timestamp: new Date(),
-        isError: !data.success,
-        metadata: data.metadata,
       };
 
       setMessages((prev) => [...prev, botMessage]);
@@ -116,7 +99,7 @@ const WinWireChat = () => {
 
       const errorMessage = {
         id: Date.now() + 1,
-        text: `Error: ${error.message}`,
+        text: 'Sorry, I encountered an error. Please try again.',
         sender: 'bot',
         timestamp: new Date(),
         isError: true,
@@ -168,7 +151,7 @@ const WinWireChat = () => {
             {messages.length === 0 ? (
               <div className="empty-state">
                 <p>👋 Hi! I'm the WinWire Assistant.</p>
-                <p>Choose a question below to get database information!</p>
+                <p>Ask me anything about WinWire company!</p>
               </div>
             ) : (
               <>
@@ -207,27 +190,23 @@ const WinWireChat = () => {
             )}
           </div>
 
-          {/* Prompts Grid */}
-          <div className="prompts-grid">
-            {promptsLoading ? (
-              <div className="loading-prompts">Loading prompts...</div>
-            ) : prompts.length > 0 ? (
-              prompts.map((prompt) => (
-                <button
-                  key={prompt.id}
-                  className="prompt-btn"
-                  onClick={() => handlePromptClick(prompt.id, prompt.label, prompt.emoji)}
-                  disabled={loading}
-                  title={prompt.description}
-                >
-                  <span className="prompt-emoji">{prompt.emoji}</span>
-                  <span className="prompt-label">{prompt.label}</span>
-                </button>
-              ))
-            ) : (
-              <div className="no-prompts">No prompts available</div>
-            )}
-          </div>
+          <form className="input-form" onSubmit={handleSendMessage}>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Ask about WinWire..."
+              disabled={loading}
+              className="message-input"
+            />
+            <button
+              type="submit"
+              disabled={loading || !inputValue.trim()}
+              className="send-btn"
+            >
+              {loading ? '...' : '➤'}
+            </button>
+          </form>
         </div>
       )}
     </div>

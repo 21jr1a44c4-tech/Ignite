@@ -39,7 +39,7 @@ Ignite/
 │   ├── QUICKSTART.md              # Getting started
 │   ├── FEATURES.md                # Feature overview
 │   ├── CHATBOT_SETUP.md           # Chatbot guide
-│   ├── TESTING_GUIDE.md           # Testing instructions
+│   ├── TESTING.md                 # Testing instructions
 │   ├── EMAIL_FLOW_ANALYSIS.md     # Email system docs
 │   ├── PROJECT_SUMMARY.md         # Project overview
 │   ├── *.pdf                      # Company resources

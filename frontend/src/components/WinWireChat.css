@@ -265,6 +265,36 @@
 }
 
 /* Input Form */
+.input-form {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+
+.message-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.message-input:focus {
+  border-color: #667eea;
+}
+
+.message-input:disabled {
+  background: #f5f5f5;
+  color: #999;
+}
+
 .send-btn {
   width: 36px;
   height: 36px;
@@ -294,67 +324,6 @@
   cursor: not-allowed;
 }
 
-/* Prompts Grid */
-.prompts-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 12px;
-  background: #f8f9fa;
-  border-top: 1px solid #e0e0e0;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.prompt-btn {
-  padding: 10px 8px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #333;
-}
-
-.prompt-btn:hover:not(:disabled) {
-  background: #e3f2fd;
-  border-color: #667eea;
-  transform: translateY(-2px);
-}
-
-.prompt-btn:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-.prompt-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.prompt-emoji {
-  font-size: 18px;
-}
-
-.prompt-label {
-  text-align: center;
-  line-height: 1.2;
-}
-
-.loading-prompts,
-.no-prompts {
-  grid-column: 1 / -1;
-  padding: 16px;
-  text-align: center;
-  color: #999;
-  font-size: 12px;
-}
-
 /* Responsive Design */
 @media (max-width: 480px) {
   .chat-window {
@@ -365,9 +334,5 @@
 
   .message-content {
     max-width: 85%;
-  }
-
-  .prompts-grid {
-    grid-template-columns: 1fr;
   }
 }

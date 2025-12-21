@@ -28,7 +28,6 @@ const ALLOWED_COLLECTIONS = {
   'Candidates': {
     model: Candidate,
     allowedFields: {
-      'fullName': 1,
       'name': 1,
       'email': 1,
       'phone': 1,
@@ -37,11 +36,11 @@ const ALLOWED_COLLECTIONS = {
       'status': 1,
       'offerStatus': 1,
       'appliedDate': 1,
-      'createdAt': 1,
       'experience': 1,
       'qualification': 1,
       'location': 1,
       'linkedin': 1,
+      'createdAt': 1,
       '_id': 1,
     },
     description: 'Candidate information (name, contact, position, status, offer status)',
@@ -217,20 +216,10 @@ async function getCollectionStats(collectionName) {
     let stats = { total };
 
     if (collectionName === 'Candidates') {
-      const byOfferStatus = await collection.model.aggregate([
-        { $group: { _id: '$offerStatus', count: { $sum: 1 } } },
-        { $sort: { _id: 1 } }
-      ]);
-      stats.byOfferStatus = byOfferStatus;
-      
-      // Also get by status if available
       const byStatus = await collection.model.aggregate([
         { $group: { _id: '$status', count: { $sum: 1 } } },
-        { $sort: { _id: 1 } }
       ]);
-      if (byStatus && byStatus.length > 0 && byStatus[0]._id !== null) {
-        stats.byStatus = byStatus;
-      }
+      stats.byStatus = byStatus;
     }
 
     if (collectionName === 'Employees') {
