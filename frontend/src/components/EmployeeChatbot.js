@@ -8,8 +8,8 @@ const EmployeeChatbot = () => {
   const [showChat, setShowChat] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Get backend URL
-  const BACKEND_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  // Get backend URL (uses relative path for production, localhost for development)
+  const BACKEND_URL = process.env.REACT_APP_API_URL || '/api';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

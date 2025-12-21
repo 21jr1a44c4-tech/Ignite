@@ -9,8 +9,8 @@ const WinWireChat = () => {
   const [userRole, setUserRole] = useState('EMPLOYEE');
   const messagesEndRef = useRef(null);
 
-  // Get backend URL from environment or use default
-  const BACKEND_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  // Get backend URL from environment or use relative path for production
+  const BACKEND_URL = process.env.REACT_APP_API_URL || '/api';
 
   // Get user role from localStorage on component mount
   useEffect(() => {
