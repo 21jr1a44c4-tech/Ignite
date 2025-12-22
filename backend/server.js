@@ -25,7 +25,7 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: [
-    'http://3.16.82.179:3000',
+    'http://3.149.214.234:3000',
     'http://localhost:3000',
     'http://127.0.0.1:3000'
   ],
