@@ -11,7 +11,8 @@ function EmployeeWelcome() {
     // Get user info from localStorage
     const userData = JSON.parse(localStorage.getItem('user'));
     if (userData) {
-      setUser(userData);
+      // User data is retrieved but not needed in state
+      // userData is available from localStorage when needed
     }
     setLoading(false);
   }, []);
