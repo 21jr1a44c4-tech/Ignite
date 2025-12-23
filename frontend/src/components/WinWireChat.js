@@ -28,7 +28,7 @@ const WinWireChat = () => {
       try {
         const user = JSON.parse(storedUser);
         if (user.role) {
-          setUserRole(user.role);
+          // User role is available from localStorage if needed
           console.log('Chatbot User Role:', user.role);
         }
       } catch (error) {
