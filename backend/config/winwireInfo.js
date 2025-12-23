@@ -87,9 +87,9 @@ const winwireInfo = {
 
   adminTeam: [
     {
-      name: "Rajesh Kumar",
+      name: "Ashu Goel",
       title: "Chief Executive Officer (CEO)",
-      email: "rajesh@winwire.com",
+      email: "Ashu@winwire.com",
       phone: "+1-800-WIN-0001",
       background: "20+ years in tech leadership, founded 3 startups",
       office: "Floor 10, Main Building",

@@ -9,7 +9,16 @@ const EmployeeChatbot = () => {
   const messagesEndRef = useRef(null);
 
   // Get backend URL
-  const BACKEND_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const getBackendURL = () => {
+    if (process.env.REACT_APP_API_URL) {
+      return process.env.REACT_APP_API_URL;
+    }
+    if (process.env.NODE_ENV === 'development') {
+      return 'http://localhost:5000/api';
+    }
+    return '/api';
+  };
+  const BACKEND_URL = getBackendURL();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

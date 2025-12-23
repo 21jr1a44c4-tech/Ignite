@@ -1,5 +1,22 @@
 const nodemailer = require('nodemailer');
 const path = require('path');
+const fs = require('fs');
+
+// Helper function to get document path (works with Azure and local)
+const getDocumentPath = (filename) => {
+  // Check for Azure-specific environment variable first
+  if (process.env.DOCUMENTS_DIR) {
+    return path.join(process.env.DOCUMENTS_DIR, filename);
+  }
+  
+  // For Azure App Services
+  if (process.env.WEBSITE_INSTANCE_ID) {
+    return path.join('/home/site/wwwroot', 'documents', filename);
+  }
+  
+  // For local development
+  return path.join(__dirname, '../documents', filename);
+};
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -158,11 +175,11 @@ const sendEmployeeDetailsEmail = async (employee, reportingManager) => {
     attachments: [
       {
         filename: 'WinWire_Core_Values.pdf',
-        path: path.join(__dirname, '../documents/WinWire Core Values.pdf')
+        path: getDocumentPath('WinWire Core Values.pdf')
       },
       {
         filename: 'Holiday_List_2025.pdf',
-        path: path.join(__dirname, '../documents/Holiday_List_2025.pdf')
+        path: getDocumentPath('Holiday_List_2025.pdf')
       }
     ]
   };

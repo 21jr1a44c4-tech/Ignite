@@ -2,8 +2,26 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+// For Azure App Services, use a proper persistent directory
+// In Azure, use /home/site/wwwroot or environment variable
+const getUploadsDir = () => {
+  // Check for Azure-specific environment variable first
+  if (process.env.UPLOAD_DIR) {
+    return process.env.UPLOAD_DIR;
+  }
+  
+  // For Azure App Services
+  if (process.env.WEBSITE_INSTANCE_ID) {
+    return path.join('/home/site/wwwroot', 'uploads');
+  }
+  
+  // For local development
+  return path.join(__dirname, '../uploads');
+};
+
+const uploadsDir = getUploadsDir();
+
 // Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }

@@ -11,7 +11,16 @@ const WinWireChat = () => {
   const messagesEndRef = useRef(null);
 
   // Get backend URL from environment or use default
-  const BACKEND_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const getBackendURL = () => {
+    if (process.env.REACT_APP_API_URL) {
+      return process.env.REACT_APP_API_URL;
+    }
+    if (process.env.NODE_ENV === 'development') {
+      return 'http://localhost:5000/api';
+    }
+    return '/api';
+  };
+  const BACKEND_URL = getBackendURL();
 
   // Get user role and load prompts on component mount
   useEffect(() => {

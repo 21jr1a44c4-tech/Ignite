@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const fs = require('fs');
 
 // Load environment variables
 dotenv.config();
@@ -22,15 +23,42 @@ const seedAdmin = require('./utils/seedAdmin');
 
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin: [
-    'http://3.149.214.234:3000',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000'
-  ],
-  credentials: true
-}));
+// Smart detection: Single Service vs Separate Services
+// In production (Azure): will be true, or NODE_ENV is production
+// In local dev: will be false, separate frontend/backend servers
+const isSingleService = 
+  process.env.SINGLE_SERVICE === 'true' || 
+  process.env.NODE_ENV === 'production';
+
+console.log(`🔍 Deployment Mode: ${isSingleService ? '🔗 SINGLE SERVICE (Frontend+Backend)' : '⚡ SEPARATE SERVICES'}`);
+
+// Middleware - CORS Configuration
+if (!isSingleService) {
+  // Separate services: Allow specific frontend origin
+  const allowedOrigins = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
+    : [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://localhost:5173',  // Vite default port
+        'http://127.0.0.1:5173'
+      ];
+  
+  console.log('✅ CORS enabled for origins:', allowedOrigins);
+  
+  app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+  }));
+} else {
+  // Single service: Allow same-origin requests only
+  app.use(cors({
+    origin: true,
+    credentials: true
+  }));
+  console.log('✅ CORS configured for single-service deployment');
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -66,6 +94,39 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
+// Serve React build for single service deployment
+// This must come AFTER all /api routes but BEFORE the 404 catch-all
+if (isSingleService) {
+  const buildPath = path.join(__dirname, '../frontend/build');
+  
+  // Check if build exists
+  if (fs.existsSync(buildPath)) {
+    console.log('📦 Serving React frontend from:', buildPath);
+    
+    // Serve static files from React build
+    app.use(express.static(buildPath, {
+      maxAge: '1d',
+      etag: false
+    }));
+    
+    // SPA routing - all non-API routes serve index.html
+    app.get('*', (req, res) => {
+      // Don't serve index.html for API routes that might 404
+      if (req.path.startsWith('/api/')) {
+        return res.status(404).json({
+          success: false,
+          message: 'API endpoint not found'
+        });
+      }
+      
+      res.sendFile(path.join(buildPath, 'index.html'));
+    });
+  } else {
+    console.warn('⚠️ React build not found at', buildPath);
+    console.warn('📋 To build frontend, run: cd frontend && npm run build');
+  }
+}
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -81,4 +142,9 @@ const HOST = process.env.HOST || '0.0.0.0';
 
 app.listen(PORT, HOST, () => {
   console.log(`🚀 Server running on ${HOST}:${PORT}`);
+  if (isSingleService) {
+    console.log('📱 Single Service Mode: Frontend + Backend on same port');
+  } else {
+    console.log('⚡ Separate Services Mode: Backend only');
+  }
 });

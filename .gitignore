@@ -30,8 +30,10 @@ Thumbs.db
 
 # Build outputs
 dist/
-build/
 .next/
+# Keep frontend/build for production deployment
+# build/ is ignored below, but frontend/build is needed
+
 
 # Temporary files
 *.tmp
