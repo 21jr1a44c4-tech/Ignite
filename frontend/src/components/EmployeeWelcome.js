@@ -5,7 +5,6 @@ import EmployeeChatbot from './EmployeeChatbot';
 
 function EmployeeWelcome() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

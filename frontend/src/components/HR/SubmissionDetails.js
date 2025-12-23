@@ -16,10 +16,9 @@ const SubmissionDetails = () => {
   const [dateOfJoining, setDateOfJoining] = useState('');
   const [showApproveModal, setShowApproveModal] = useState(false);
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-
   useEffect(() => {
     fetchSubmission();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchSubmission = async () => {

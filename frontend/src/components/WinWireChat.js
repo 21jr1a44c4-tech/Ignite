@@ -39,6 +39,7 @@ const WinWireChat = () => {
     
     // Load available prompts
     loadPrompts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadPrompts = async () => {

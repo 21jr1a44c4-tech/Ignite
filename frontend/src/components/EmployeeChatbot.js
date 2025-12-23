@@ -39,6 +39,7 @@ const EmployeeChatbot = () => {
       };
       setMessages([welcomeMessage]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showChat]);
 
   const handleSendMessage = async (e) => {

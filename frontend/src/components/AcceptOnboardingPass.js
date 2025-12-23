@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { FiCheckCircle, FiXCircle, FiMail, FiUser, FiBriefcase, FiCalendar } from 'react-icons/fi';
+import { FiCheckCircle, FiXCircle, FiMail, FiUser } from 'react-icons/fi';
 import api from '../utils/api';
 import './AcceptOffer.css'; // Reusing the same styling
 
