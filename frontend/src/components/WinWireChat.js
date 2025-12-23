@@ -5,7 +5,6 @@ const WinWireChat = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [userRole, setUserRole] = useState('EMPLOYEE');
   const [prompts, setPrompts] = useState([]);
   const [promptsLoading, setPromptsLoading] = useState(false);
   const messagesEndRef = useRef(null);

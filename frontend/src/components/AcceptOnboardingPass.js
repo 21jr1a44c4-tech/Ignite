@@ -16,6 +16,7 @@ const AcceptOnboardingPass = () => {
 
   useEffect(() => {
     fetchOnboardingPassDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchOnboardingPassDetails = async () => {
