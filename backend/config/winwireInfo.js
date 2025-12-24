@@ -3,330 +3,486 @@
  * Contains all company data: team, services, benefits, culture, etc.
  * This is the ONLY source of truth for employee chatbot - NO WEB SEARCH
  */
-
+ 
 const winwireInfo = {
+ 
   company: {
-    name: "WinWire",
-    tagline: "Transforming Business Through Innovation",
-    mission: "To empower businesses with cutting-edge technology solutions and exceptional talent",
-    vision: "To be the leading technology partner for digital transformation",
+    name: "WinWire Technologies",
+    tagline: "Engineering Digital Transformation",
+    mission:
+      "To help enterprises accelerate digital transformation through cloud, data, AI, and modern engineering practices.",
+    vision:
+      "To be a trusted global partner delivering measurable business outcomes through technology innovation.",
     founded: "2015",
-    headquarters: "Cloud Solutions Hub, Tech Park",
-    website: "www.winwire.com",
-    phone: "+1-800-WIN-WIRE",
-    email: "careers@winwire.com",
-  },
-
+    headquarters: "Santa Clara, California, USA",
+    globalPresence: ["United States", "India"],
+    website: "https://www.winwire.com",
+    contact: {
+      general: "info@winwire.com",
+      careers: "careers@winwire.com"
+    },
+    industry: [
+      "Digital Engineering",
+      "Cloud & Data Services",
+      "AI & Analytics",
+      "Enterprise Technology Consulting"
+    ],
+    companyType: "Private",
+  }
+  ,
+ 
   services: [
     {
-      id: "cloud-solutions",
-      name: "Cloud Solutions",
-      description: "Enterprise cloud infrastructure, migration, and management services",
-      technologies: ["AWS", "Azure", "Google Cloud", "Kubernetes", "Docker"],
-      clients: "500+ enterprises across industries",
-      revenue: "40% of company revenue",
+      id: "cloud-data-ai",
+      name: "Cloud, Data & AI Solutions",
+      description:
+        "End-to-end cloud transformation services including Azure migration, cloud-native development, data platforms, and AI-driven analytics.",
+      technologies: [
+        "Microsoft Azure",
+        "Azure Data Factory",
+        "Azure Synapse",
+        "Databricks",
+        "Power BI",
+        "Azure AI Services"
+      ],
+      offerings: [
+        "Cloud migration & modernization",
+        "Data engineering & analytics",
+        "AI/ML solutions",
+        "Enterprise reporting & insights"
+      ],
+      primaryClients: "Mid-to-large enterprises across retail, healthcare, finance, and technology"
     },
     {
-      id: "ai-ml",
-      name: "AI & Machine Learning",
-      description: "Custom AI solutions, predictive analytics, and intelligent automation",
-      technologies: ["Python", "TensorFlow", "PyTorch", "Natural Language Processing", "Computer Vision"],
-      clients: "200+ AI implementation projects",
-      revenue: "35% of company revenue",
+      id: "application-modernization",
+      name: "Application Modernization",
+      description:
+        "Modernization of legacy applications into scalable, secure, cloud-native solutions.",
+      technologies: [
+        ".NET",
+        "Java",
+        "React",
+        "Node.js",
+        "Microservices",
+        "REST APIs"
+      ],
+      offerings: [
+        "Legacy system modernization",
+        "Cloud-native application development",
+        "API & microservices architecture",
+        "Performance and security optimization"
+      ],
+      primaryClients: "Enterprises modernizing legacy platforms"
     },
     {
-      id: "web-development",
-      name: "Web & Mobile Development",
-      description: "Full-stack web and mobile application development",
-      technologies: ["React", "Node.js", "Flutter", "iOS/Android", "Progressive Web Apps"],
-      clients: "300+ successful projects",
-      revenue: "15% of company revenue",
+      id: "digital-engineering",
+      name: "Digital Engineering & Product Development",
+      description:
+        "Design and development of digital products with strong focus on user experience and scalability.",
+      technologies: [
+        "React",
+        "Angular",
+        "Next.js",
+        "Mobile (iOS / Android)",
+        "UI/UX Design Tools"
+      ],
+      offerings: [
+        "Product engineering",
+        "UI/UX design",
+        "MVP development",
+        "Design systems"
+      ],
+      primaryClients: "Product companies and digital-first enterprises"
     },
     {
-      id: "consulting",
-      name: "Digital Transformation Consulting",
-      description: "Strategy, planning, and implementation of digital transformation initiatives",
-      technologies: ["Process Automation", "Change Management", "Business Intelligence"],
-      clients: "100+ consulting engagements",
-      revenue: "10% of company revenue",
+      id: "devops-platform",
+      name: "DevOps & Platform Engineering",
+      description:
+        "Automation-driven DevOps and platform engineering services to improve deployment speed, reliability, and scalability.",
+      technologies: [
+        "Azure DevOps",
+        "GitHub",
+        "Docker",
+        "Kubernetes",
+        "Terraform",
+        "CI/CD Pipelines"
+      ],
+      offerings: [
+        "CI/CD automation",
+        "Infrastructure as Code (IaC)",
+        "Cloud security & governance",
+        "Monitoring & reliability engineering"
+      ],
+      primaryClients: "Organizations adopting DevOps and cloud-native practices"
     },
-  ],
-
+    {
+      id: "consulting-advisory",
+      name: "Technology Consulting & Advisory",
+      description:
+        "Strategic consulting to help organizations plan and execute digital transformation initiatives.",
+      technologies: [
+        "Enterprise Architecture",
+        "Data Strategy",
+        "Cloud Strategy",
+        "Process Automation"
+      ],
+      offerings: [
+        "Digital transformation roadmap",
+        "Cloud & data strategy",
+        "Architecture assessment",
+        "Technology advisory"
+      ],
+      primaryClients: "CXOs and IT leadership teams"
+    }
+  ]
+  ,
+ 
   departments: [
     {
-      name: "Engineering",
-      description: "Develops and maintains all technical solutions",
-      teams: ["Cloud Infrastructure", "AI/ML Platform", "Web Development", "DevOps"],
-      headcount: "150 engineers",
+      name: "Engineering & Digital Delivery",
+      description: "Designs, develops, and delivers cloud, data, and AI solutions with quality and scalability.",
+      teams: [
+        "Cloud & Azure Services",
+        "Data & AI Engineering",
+        "Application Modernization",
+        "Quality Assurance & Testing",
+        "DevOps & Platform Engineering"
+      ],
+      headcount: "300+ professionals",
     },
     {
-      name: "Sales & Marketing",
-      description: "Drives business growth and client relationships",
-      teams: ["Enterprise Sales", "Marketing", "Business Development"],
-      headcount: "30 professionals",
+      name: "Sales, Marketing & Client Success",
+      description: "Drives business growth, builds relationships with enterprise clients, and ensures project success.",
+      teams: [
+        "Enterprise Sales",
+        "Marketing & Brand",
+        "Business Development",
+        "Client Engagement & Solutions Consulting"
+      ],
+      headcount: "60+ professionals",
     },
     {
-      name: "Human Resources",
-      description: "Manages recruitment, onboarding, and employee development",
-      teams: ["Recruitment", "Onboarding", "Learning & Development", "Employee Relations"],
-      headcount: "15 professionals",
+      name: "Human Resources & Talent",
+      description: "Manages recruitment, onboarding, employee experience, and learning & development.",
+      teams: [
+        "Recruitment & Staffing",
+        "Onboarding & HR Operations",
+        "Learning & Development",
+        "Employee Engagement"
+      ],
+      headcount: "40+ professionals",
     },
     {
-      name: "Finance & Operations",
-      description: "Manages finances, operations, and administrative functions",
-      teams: ["Accounting", "Financial Planning", "Operations", "Procurement"],
-      headcount: "20 professionals",
+      name: "Finance & Administration",
+      description: "Handles financial planning, budgeting, compliance, and administrative operations.",
+      teams: [
+        "Accounting & Reporting",
+        "Financial Planning & Analysis",
+        "Procurement & Vendor Management",
+        "Office Administration"
+      ],
+      headcount: "30+ professionals",
     },
     {
-      name: "Product & Design",
-      description: "Creates innovative products and world-class user experiences",
-      teams: ["Product Management", "UX/UI Design", "Design Systems"],
-      headcount: "25 professionals",
+      name: "Product & Design Enablement",
+      description: "Supports innovative product engineering services and enhances user experiences.",
+      teams: [
+        "Product Engineering & Strategy",
+        "UX/UI Design",
+        "Product Innovation & Prototyping",
+        "Design Systems & Research"
+      ],
+      headcount: "50+ professionals",
     },
   ],
-
+ 
   adminTeam: [
     {
       name: "Ashu Goel",
       title: "Chief Executive Officer (CEO)",
-      email: "Ashu@winwire.com",
-      phone: "+1-800-WIN-0001",
-      background: "20+ years in tech leadership, founded 3 startups",
-      office: "Floor 10, Main Building",
+      email: "", // Public emails not officially published
+      phone: "", // Public phone not officially published
+      background: "Co-founder of WinWire, former Microsoft and A.T. Kearney leader",
+      office: "Santa Clara, California, USA",
     },
     {
-      name: "Priya Sharma",
+      name: "Vineet Arora",
       title: "Chief Technology Officer (CTO)",
-      email: "priya@winwire.com",
-      phone: "+1-800-WIN-0002",
-      background: "15+ years in cloud and AI, ex-Amazon engineer",
-      office: "Floor 10, Tech Building",
+      email: "", // Public emails not officially published
+      phone: "",
+      background: "Long-term WinWire leader with deep experience in tech strategy and development",
+      office: "San Francisco Bay Area, USA",
     },
     {
-      name: "Aditya Patel",
+      name: "Tanmoy Chowdhury",
       title: "Chief Financial Officer (CFO)",
-      email: "aditya@winwire.com",
-      phone: "+1-800-WIN-0003",
-      background: "18+ years in finance, IIM graduate",
-      office: "Floor 9, Main Building",
+      email: "", // Public email not officially published
+      phone: "",
+      background: "Leads financial planning and operations at WinWire",
+      office: "USA",
     },
     {
-      name: "Sarah Johnson",
-      title: "VP - Human Resources",
-      email: "sarah@winwire.com",
-      phone: "+1-800-WIN-0004",
-      background: "12+ years in HR, certified SHRM-CP",
-      office: "Floor 8, HR Building",
+      name: "Kalyan Gottumukkala",
+      title: "Chief Revenue Officer (CRO)",
+      email: "", // Public email not officially published
+      phone: "",
+      background: "Drives revenue strategy and business growth",
+      office: "USA",
     },
     {
-      name: "Marcus Chen",
-      title: "VP - Engineering",
-      email: "marcus@winwire.com",
-      phone: "+1-800-WIN-0005",
-      background: "16+ years in software development, ex-Google",
-      office: "Floor 7, Tech Building",
+      name: "Subhash Poojari",
+      title: "Vice President – Global Delivery",
+      email: "", // Public email not officially published
+      phone: "",
+      background: "Oversees delivery excellence and global delivery operations",
+      office: "India",
+    },
+    {
+      name: "Subba Rao",
+      title: "Vice President – Finance & Administration",
+      email: "", // Public email not officially published
+      phone: "",
+      background: "Leads finance and administrative functions",
+      office: "USA / India",
     },
   ],
-
-  benefits: [
-    {
-      category: "Health & Wellness",
-      items: [
-        "Comprehensive health insurance (medical, dental, vision)",
-        "Mental health counseling and support",
-        "Fitness center membership",
-        "Annual health checkups",
-        "COVID-19 vaccination support",
-      ],
-    },
-    {
-      category: "Financial Benefits",
-      items: [
-        "Competitive salary packages",
-        "Performance bonuses (up to 20% of salary)",
-        "Stock options for senior staff",
-        "Retirement planning assistance",
-        "Life insurance coverage",
-      ],
-    },
-    {
-      category: "Work-Life Balance",
-      items: [
-        "Flexible work hours (8am-10am start time)",
-        "Remote work options (up to 3 days/week)",
-        "Unlimited paid time off (PTO)",
-        "Parental leave (6 months for both parents)",
-        "Sabbatical programs",
-      ],
-    },
-    {
-      category: "Learning & Development",
-      items: [
-        "Annual training budget ($5000/employee)",
-        "Certification reimbursement (AWS, Azure, GCP, etc.)",
-        "Online course subscriptions (Coursera, Udemy, etc.)",
-        "Internal mentorship programs",
-        "Conference attendance support",
-      ],
-    },
-    {
-      category: "Perks & Facilities",
-      items: [
-        "Free meals and beverages in office",
-        "Gaming and recreation areas",
-        "Shuttle service to major locations",
-        "Pet-friendly office policy",
-        "On-site gym and yoga classes",
-      ],
-    },
-  ],
-
+ 
+benefits: [
+  {
+    category: "Health & Wellness",
+    items: [
+      "Group medical insurance coverage for employees",
+      "Optional dependent medical insurance",
+      "Annual health check-ups",
+      "Employee wellness and health awareness programs",
+      "Access to mental well-being support resources"
+    ],
+  },
+  {
+    category: "Financial Benefits",
+    items: [
+      "Competitive and market-aligned salary structure",
+      "Performance-based incentives and rewards",
+      "Statutory benefits as per applicable laws (PF, gratuity, etc.)",
+      "Life insurance coverage",
+      "Accidental insurance coverage"
+    ],
+  },
+  {
+    category: "Work-Life Balance",
+    items: [
+      "Standard working hours with flexibility based on project needs",
+      "Hybrid or remote work options (role and project dependent)",
+      "Paid time off (earned leave, sick leave, and company holidays)",
+      "Maternity and paternity leave as per company policy",
+      "Leave Management System (LMS) for easy leave tracking"
+    ],
+  },
+  {
+    category: "Learning & Development",
+    items: [
+      "Structured onboarding and induction programs",
+      "Access to internal technical and soft-skills training",
+      "Certification support for relevant technologies (role-based)",
+      "Continuous learning through internal knowledge sessions",
+      "Career development and performance review programs"
+    ],
+  },
+  {
+    category: "Employee Engagement & Culture",
+    items: [
+      "Employee recognition and appreciation programs",
+      "Team-building and engagement activities",
+      "Inclusive and collaborative workplace culture",
+      "Diversity, equity, and equal opportunity practices",
+      "Open communication and feedback culture"
+    ],
+  },
+]
+,
+ 
   culture: {
-    values: [
-      "Innovation - We embrace creative thinking and new ideas",
-      "Integrity - We conduct business with highest ethical standards",
-      "Collaboration - We work together across teams and departments",
-      "Excellence - We strive for quality in everything we do",
-      "Diversity - We celebrate different backgrounds and perspectives",
-    ],
-    workEnvironment:
-      "WinWire is a fast-paced, dynamic workplace where innovation thrives. We believe in empowering our employees, encouraging experimentation, and learning from failures. Our culture is built on trust, transparency, and mutual respect.",
-    diversity:
-      "We are committed to building an inclusive workplace. Our team includes members from 25+ countries, speaking 30+ languages. We actively promote diversity in hiring, leadership, and company policies.",
-    socialResponsibility:
-      "WinWire dedicates 2% of profits to community development, environmental sustainability, and education initiatives. All employees get 2 paid days/year for volunteer work.",
-  },
-
-  onboarding: {
-    duration: "30-90 days structured program",
-    week1: [
-      "Welcome and orientation",
-      "Office tour and access setup",
-      "Meet your manager and team",
-      "System training (email, VPN, tools)",
-      "Company culture and values overview",
-    ],
-    week2to4: [
-      "Technical training and setup",
-      "Project assignments",
-      "Meet stakeholders and other teams",
-      "Attend team meetings and events",
-      "Complete compliance training",
-    ],
-    month2to3: [
-      "Independent project ownership",
-      "Build relationships across company",
-      "Receive first performance feedback",
-      "Onboarding completion assessment",
-      "Plan career development goals",
-    ],
-  },
-
-  faqs: [
-    {
-      question: "What is the application process?",
-      answer:
-        "Apply through our website (www.winwire.com/careers), submit resume and cover letter. Selected candidates go through phone screening, technical interview, and final round with leadership. Process takes 2-4 weeks.",
-    },
-    {
-      question: "What are the salary ranges?",
-      answer:
-        "Salaries are competitive and based on experience, skills, and role. Fresh graduates start at ₹6-8 LPA, mid-level engineers at ₹12-18 LPA, seniors at ₹20-30 LPA. We also offer equity options.",
-    },
-    {
-      question: "What is the work culture like?",
-      answer:
-        "WinWire fosters an inclusive, innovative culture. We encourage experimentation, cross-team collaboration, and continuous learning. Flexibility, transparency, and integrity are core values.",
-    },
-    {
-      question: "Do you offer remote work?",
-      answer:
-        "Yes! We offer flexible work arrangements - up to 3 days/week remote. You can work from home, office, or any location with good internet. No strict dress code, focus on output quality.",
-    },
-    {
-      question: "What are career growth opportunities?",
-      answer:
-        "Clear career paths with growth opportunities every 2 years. We offer promotions based on merit, internal mobility programs, leadership training, and mentorship opportunities.",
-    },
-    {
-      question: "How much time off do I get?",
-      answer:
-        "Unlimited paid time off (PTO) + 12 public holidays + 6 weeks parental leave. We encourage employees to take at least 20 days leave/year to maintain work-life balance.",
-    },
-    {
-      question: "What is the interview process?",
-      answer:
-        "Typically 3 rounds: (1) Phone screening with recruiter, (2) Technical interview with engineers, (3) Final round with VP/Leadership. For freshers, there may be a coding test. Total time: 2-4 weeks.",
-    },
-    {
-      question: "Do you sponsor visas?",
-      answer:
-        "Yes, we sponsor visas for international candidates. We have offices in India, USA, UK, and Singapore. Relocation support is provided.",
-    },
+  values: [
+    "Customer Focus – We prioritize delivering measurable value to our clients",
+    "Integrity – We act with honesty, transparency, and ethical responsibility",
+    "Collaboration – We work as one team across functions and geographies",
+    "Excellence – We strive for high quality and continuous improvement",
+    "Respect & Inclusion – We value diverse perspectives and treat everyone with respect"
   ],
-
-  offices: [
+  workEnvironment:
+    "WinWire fosters a collaborative and performance-driven work environment where employees are encouraged to take ownership, continuously learn, and contribute to impactful solutions. The company emphasizes trust, accountability, and open communication.",
+  diversityAndInclusion:
+    "WinWire is committed to providing an inclusive workplace with equal opportunities for all employees. Diversity and inclusion are integral to hiring, career growth, and leadership development practices.",
+  socialResponsibility:
+    "WinWire supports community engagement and responsible business practices through employee-driven initiatives, sustainability awareness, and participation in social impact programs as per company policies.",
+},
+ 
+culture: {
+  coreValues: [
     {
-      location: "Hyderabad, India",
-      address: "Tech Park, Gachibowli, Hyderabad 500032",
-      employees: "300+",
-      facilities: ["Gym", "Cafeteria", "Recreation Area", "Meeting Rooms", "Training Center"],
+      title: "People First",
+      description:
+        "We prioritize our people by fostering a supportive, inclusive, and respectful workplace that enables growth, well-being, and long-term success."
     },
     {
-      location: "Bangalore, India",
-      address: "Innovation Hub, Whitefield, Bangalore 560066",
-      employees: "200+",
-      facilities: ["Gym", "Cafeteria", "Gaming Area", "Lounge", "Parking"],
+      title: "Technology Leadership",
+      description:
+        "We lead with technology by continuously innovating, adopting modern platforms, and delivering scalable, future-ready solutions for our clients."
     },
     {
-      location: "New York, USA",
-      address: "Times Square, Manhattan, NY 10036",
-      employees: "100+",
-      facilities: ["Gym", "Cafeteria", "Recreation Area", "Client Meeting Rooms"],
-    },
-    {
-      location: "London, UK",
-      address: "Tech Hub, Shoreditch, London EC1V 6PB",
-      employees: "50+",
-      facilities: ["Meeting Rooms", "Cafeteria", "Collaboration Space"],
-    },
+      title: "Execution Excellence",
+      description:
+        "We focus on disciplined execution, quality delivery, and accountability to consistently meet and exceed customer expectations."
+    }
   ],
-
-  contactInfo: {
-    recruitment: {
-      email: "careers@winwire.com",
-      phone: "+1-800-WIN-HIRE",
-      message: "Send your resume and query about open positions",
-    },
-    hr: {
-      email: "hr@winwire.com",
-      phone: "+1-800-WIN-0404",
-      message: "Contact for employee-related queries",
-    },
-    support: {
-      email: "support@winwire.com",
-      phone: "+1-800-WIN-HELP",
-      message: "General support and inquiries",
-    },
+  workEnvironment:
+    "WinWire promotes a collaborative and performance-driven environment where employees are empowered to take ownership, learn continuously, and deliver impactful digital solutions.",
+  diversityAndInclusion:
+    "WinWire is committed to equal opportunity employment and creating an inclusive workplace across all roles and levels.",
+  socialResponsibility:
+    "WinWire supports responsible business practices and encourages participation in community and sustainability initiatives in line with company policies."
+},
+onboarding: {
+  duration: "60–90 days structured onboarding program",
+  phase1_firstWeek: [
+    "HR induction and company overview",
+    "IT access setup (email, VPN, internal tools)",
+    "Introduction to manager, team, and project context",
+    "Overview of company policies, code of conduct, and core values",
+    "Basic security and compliance orientation"
+  ],
+  phase2_firstMonth: [
+    "Role-specific technical training",
+    "Project onboarding and knowledge transfer",
+    "Shadowing team members and understanding workflows",
+    "Introduction to delivery processes and quality standards",
+    "Completion of mandatory compliance and security training"
+  ],
+  phase3_month2to3: [
+    "Active contribution to assigned project(s)",
+    "Independent task ownership with peer and manager support",
+    "Regular check-ins and feedback from manager",
+    "Performance expectations alignment",
+    "Individual development plan (IDP) discussion"
+  ],
+  completion:
+    "Onboarding is considered complete after successful role integration, compliance completion, and manager confirmation."
+}
+,
+faqs: [
+  {
+    question: "What is the hiring and application process?",
+    answer:
+      "Candidates can apply through the WinWire careers page or via official recruitment channels. The selection process typically includes resume screening, one or more technical interviews, and a managerial or HR discussion. The process duration may vary depending on the role and business requirements."
   },
-
-  announcements: [
-    {
-      date: "2025-12-20",
-      title: "Welcome to WinWire Family!",
-      message: "We are excited to have new team members joining us. Orientation starts tomorrow!",
-    },
-    {
-      date: "2025-12-15",
-      title: "Year-End Celebration",
-      message: "Join us for our virtual year-end celebration on Dec 22. Exciting prizes and awards!",
-    },
-    {
-      date: "2025-12-10",
-      title: "New AI/ML Project Launch",
-      message: "We are launching 5 new AI projects next quarter. Interested engineers should reach out to CTO office.",
-    },
-  ],
+  {
+    question: "How are salaries and compensation determined?",
+    answer:
+      "Compensation is competitive and aligned with industry standards. Salary is determined based on role, experience, skill set, location, and interview performance, in accordance with company compensation policies."
+  },
+  {
+    question: "What is the work culture at WinWire?",
+    answer:
+      "WinWire promotes a collaborative, professional, and performance-driven culture. Employees are encouraged to take ownership of their work, continuously learn, and collaborate across teams while maintaining high standards of integrity and quality."
+  },
+  {
+    question: "Do you offer remote or hybrid work options?",
+    answer:
+      "WinWire supports flexible work arrangements such as hybrid or remote work, depending on project requirements, role responsibilities, and business needs."
+  },
+  {
+    question: "What career growth opportunities are available?",
+    answer:
+      "WinWire offers structured career progression through performance reviews, skill development programs, internal training, and role-based growth opportunities. Employees are encouraged to upskill and explore internal mobility where applicable."
+  },
+  {
+    question: "What leave and time-off policies are available?",
+    answer:
+      "Employees are eligible for paid time off, company-declared holidays, and statutory leaves as per company policy and applicable labor laws. Leave details are managed through the Leave Management System (LMS)."
+  },
+  {
+    question: "What does the interview process typically involve?",
+    answer:
+      "The interview process generally includes technical assessments, problem-solving discussions, and an HR or managerial round. The exact structure may vary depending on the role and level."
+  },
+  {
+    question: "What onboarding support is provided to new employees?",
+    answer:
+      "New hires go through a structured onboarding program that includes HR induction, IT access setup, role-specific training, and project onboarding to ensure a smooth transition into the organization."
+  },
+  {
+    question: "How can employees raise HR or workplace-related queries?",
+    answer:
+      "Employees can reach out to the HR team through official communication channels or use internal systems such as the HR portal or employee helpdesk for assistance."
+  }
+]
+,
+offices: [
+  {
+    location: "Hyderabad, India",
+    address: "Hyderabad, Telangana, India",
+    role: "Primary delivery and engineering center",
+    teams: [
+      "Engineering & Digital Delivery",
+      "Data & AI",
+      "Quality Assurance",
+      "HR & Operations"
+    ],
+    facilities: [
+      "Workstations and collaboration spaces",
+      "Meeting and training rooms",
+      "IT and security infrastructure"
+    ]
+  },
+  {
+    location: "Bengaluru, India",
+    address: "Bengaluru, Karnataka, India",
+    role: "Technology delivery and talent hub",
+    teams: [
+      "Application Development",
+      "Cloud & DevOps",
+      "Product Engineering"
+    ],
+    facilities: [
+      "Project work areas",
+      "Meeting rooms",
+      "Training and onboarding spaces"
+    ]
+  },
+  {
+    location: "Santa Clara, California, USA",
+    address: "Santa Clara, California, USA",
+    role: "Corporate headquarters and client engagement",
+    teams: [
+      "Leadership & Management",
+      "Sales & Client Success",
+      "Technology Consulting"
+    ],
+    facilities: [
+      "Corporate offices",
+      "Client meeting rooms",
+      "Collaboration spaces"
+    ]
+  }
+]
+,contactInfo: {
+  recruitment: {
+    email: "careers@winwire.com",
+    message:
+      "For job opportunities, applications, and recruitment-related queries. Please apply through official hiring channels or share your resume when requested."
+  },
+  hr: {
+    email: "hr@winwire.com",
+    message:
+      "For employee-related queries such as onboarding, HR policies, benefits, leave, and internal processes."
+  },
+  general: {
+    email: "info@winwire.com",
+    message:
+      "For general business inquiries, partnerships, and company-related information."
+  }
+}
 };
-
+ 
 module.exports = winwireInfo;
+ 
