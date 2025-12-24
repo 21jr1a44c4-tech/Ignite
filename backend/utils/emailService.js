@@ -10,8 +10,26 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// Validate FRONTEND_URL configuration
+const getFrontendUrl = () => {
+  if (!process.env.FRONTEND_URL) {
+    console.error('❌ CRITICAL: FRONTEND_URL environment variable is not set!');
+    console.error('   This will cause email links to show as "undefined"');
+    console.error('   Please add FRONTEND_URL to your .env file');
+    console.error('   Example: FRONTEND_URL=https://your-domain.com');
+    // Provide a helpful fallback for development
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('   Using localhost fallback for development');
+      return 'http://localhost:3000';
+    }
+    throw new Error('FRONTEND_URL is not configured. Email links cannot be generated.');
+  }
+  return process.env.FRONTEND_URL.replace(/\/$/, ''); // Remove trailing slash if present
+};
+
 const sendOfferEmail = async (candidate, acceptToken) => {
-  const acceptLink = `${process.env.FRONTEND_URL}/accept-offer/${acceptToken}`;
+  const frontendUrl = getFrontendUrl();
+  const acceptLink = `${frontendUrl}/accept-offer/${acceptToken}`;
   
   const mailOptions = {
     from: process.env.EMAIL_FROM,
@@ -58,6 +76,7 @@ const sendOfferEmail = async (candidate, acceptToken) => {
 };
 
 const sendJoiningCredentials = async (candidate, tempPassword) => {
+  const frontendUrl = getFrontendUrl();
   const mailOptions = {
     from: process.env.EMAIL_FROM,
     to: candidate.email,
@@ -78,7 +97,7 @@ const sendJoiningCredentials = async (candidate, tempPassword) => {
             <p style="margin: 8px 0; color: #000000;"><strong>Temporary Password:</strong> <code style="background: #DDDDDD; padding: 4px 8px; border-radius: 3px; font-size: 14px; color: #000000;">${tempPassword}</code></p>
           </div>
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.FRONTEND_URL}/login" style="display: inline-block; padding: 12px 30px; background: #0066CC; color: white; text-decoration: none; border-radius: 4px; font-weight: 600;">Access Portal</a>
+            <a href="${frontendUrl}/login" style="display: inline-block; padding: 12px 30px; background: #0066CC; color: white; text-decoration: none; border-radius: 4px; font-weight: 600;">Access Portal</a>
           </div>
           <div style="background: #FFF3CD; border-left: 4px solid #FF6600; padding: 15px; margin: 20px 0;">
             <p style="color: #856404; margin: 0; font-size: 13px;"><strong>Important:</strong> Please change your password immediately after your first login for security purposes.</p>
@@ -149,7 +168,8 @@ const sendWelcomeEmail = async (newEmployee, allEmployees) => {
 };
 
 const sendOnboardingPassEmail = async (submission, passToken) => {
-  const acceptLink = `${process.env.FRONTEND_URL}/accept-onboarding-pass/${passToken}`;
+  const frontendUrl = getFrontendUrl();
+  const acceptLink = `${frontendUrl}/accept-onboarding-pass/${passToken}`;
   
   const mailOptions = {
     from: process.env.EMAIL_FROM,
